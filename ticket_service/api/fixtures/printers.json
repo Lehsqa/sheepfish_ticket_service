@@ -1,0 +1,62 @@
+[
+  {
+    "model": "api.printer",
+    "pk": 1,
+    "fields": {
+      "name": "Printer_kitchen_1.1",
+      "api_key": "kitchen1.1",
+      "check_type": "kitchen",
+      "point_id": 1
+    }
+  },
+  {
+    "model": "api.printer",
+    "pk": 2,
+    "fields": {
+      "name": "Printer_kitchen_1.2",
+      "api_key": "kitchen1.2",
+      "check_type": "kitchen",
+      "point_id": 1
+    }
+  },
+  {
+    "model": "api.printer",
+    "pk": 3,
+    "fields": {
+      "name": "Printer_client_1.1",
+      "api_key": "client1.1",
+      "check_type": "client",
+      "point_id": 1
+    }
+  },
+  {
+    "model": "api.printer",
+    "pk": 4,
+    "fields": {
+      "name": "Printer_kitchen_2.1",
+      "api_key": "kitchen2.1",
+      "check_type": "kitchen",
+      "point_id": 2
+    }
+  },
+  {
+    "model": "api.printer",
+    "pk": 5,
+    "fields": {
+      "name": "Printer_client_2.1",
+      "api_key": "client2.1",
+      "check_type": "client",
+      "point_id": 2
+    }
+  },
+  {
+    "model": "api.printer",
+    "pk": 6,
+    "fields": {
+      "name": "Printer_client_2.2",
+      "api_key": "client2.2",
+      "check_type": "client",
+      "point_id": 2
+    }
+  }
+]

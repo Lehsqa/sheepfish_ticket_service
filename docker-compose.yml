@@ -1,0 +1,41 @@
+version: '3.5'
+
+services:
+  web:
+    build: ./ticket_service
+    container_name: ticket_service_web
+    command: python ticket_service/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/sheepfish_ticket_service
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres:14-alpine
+    container_name: ticket_service_db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: admin
+      POSTGRES_DB: db01
+      POSTGRES_INITDB_ARGS: "-A md5"
+  redis:
+    image: redis:7-alpine
+    container_name: ticket_service_redis
+    restart: always
+  celery_worker:
+    build: ./ticket_service
+    container_name: ticket_service_celery_worker
+    command: celery --workdir=./ticket_service -A ticket_service worker --loglevel=info
+    volumes:
+      - .:/sheepfish_ticket_service
+    depends_on:
+      - web
+  wkhtmltopdf:
+    image: openlabs/docker-wkhtmltopdf-aas
+    container_name: ticket_service_wkhtmltopdf
+    ports:
+      - 80:80
+    restart: always

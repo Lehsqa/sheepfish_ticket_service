@@ -14,4 +14,4 @@
 
 ### `http://localhost:8000/api/create` - POST method for creating check
 
-### `http://localhost:8000/api/api_key={printer.api_key}` - GET method for downloading checks from browser
+### `http://localhost:8000/api/download?api_key={printer.api_key}` - GET method for downloading checks from browser

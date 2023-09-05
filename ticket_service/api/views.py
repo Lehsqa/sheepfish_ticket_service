@@ -27,11 +27,11 @@ def check_create(request):
             data['status'] = 'new'
 
             serializer = CheckSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=True):
+            if serializer.is_valid():
                 serializer.save()
                 html_to_pdf.delay(serializer.data['id'], data['order'], printer.check_type)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+                return Response("Check was create successfully", status=status.HTTP_201_CREATED)
+            return Response("Invalid validation", status=status.HTTP_400_BAD_REQUEST)
         except Printer.DoesNotExist:
             return Response("Printer doesn't exist", status=status.HTTP_400_BAD_REQUEST)
 

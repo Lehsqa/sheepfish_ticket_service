@@ -41,16 +41,17 @@ def check_download(request):
     if request.method == 'GET':
         try:
             printer = Printer.objects.get(api_key=request.GET.get('api_key'))
-            checks = Check.objects.filter(printer_id=printer)
+            checks = Check.objects.filter(printer_id=printer).exclude(status='printed')
         except Printer.DoesNotExist:
             return Response("Api key isn't correct or empty", status=status.HTTP_400_BAD_REQUEST)
         zip_filename = "checks.zip"
 
-        if len(checks) == 1:
+        if len(checks) == 0:
+            return Response("Rendered checks don't exist", status=status.HTTP_200_OK)
+        elif len(checks) == 1:
             file_name = os.path.basename(checks[0].pdf_file.file.name)
             response = HttpResponse(checks[0].pdf_file.file, content_type='application/force-download')
             response['Content-Disposition'] = f'attachment; filename="{file_name}"'
-            return response
         else:
             with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 for check in checks:
@@ -60,4 +61,6 @@ def check_download(request):
             response = HttpResponse(open(zip_filename, 'rb').read(), content_type='application/zip')
             response['Content-Disposition'] = f'attachment; filename="{zip_filename}"'
             os.remove(zip_filename)
-            return response
+
+        checks.update(status='printed')
+        return response

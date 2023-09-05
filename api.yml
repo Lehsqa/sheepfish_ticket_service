@@ -1,0 +1,83 @@
+swagger: "2.0"
+info:
+  title: "Ticket Service API"
+  description: "API documentation for Ticket Service"
+  version: "1.0"
+
+host: "localhost:8000"
+basePath: "/api"
+schemes:
+  - "http"
+
+paths:
+  /create:
+    post:
+      summary: "Create a new check"
+      description: "Create a new check with the specified data."
+      operationId: "createCheck"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                api_key:
+                  type: "string"
+                  example: "client2.2"
+                  description: "Printer API key"
+                order:
+                  type: "object"
+                  properties:
+                    number:
+                      type: "string"
+                      example: "2"
+                      description: "Check number"
+                    data:
+                      type: "string"
+                      example: "Beef, soup, crockets, tea"
+                      description: "List of products in check"
+              required:
+                - api_key
+                - order
+      responses:
+        201:
+          description: "Check was create successfully"
+        400:
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  error:
+                    type: "string"
+                    enum:
+                      - "Printer doesn't exist"
+                      - "Invalid validation"
+                      - "Check already exists"
+                    description: "Error message"
+  /download:
+    get:
+      summary: "Download PDF or ZIP file"
+      operationId: "downloadFile"
+      parameters:
+        - name: "api_key"
+          in: "query"
+          required: true
+          type: "string"
+          description: "Printer API key"
+      responses:
+        200:
+          description: "File downloaded successfully"
+          content:
+            application/force-download:
+              schema:
+                type: "string"
+                format: "binary"
+                description: "PDF file"
+            application/zip:
+              schema:
+                type: "string"
+                format: "binary"
+                description: "ZIP file"
